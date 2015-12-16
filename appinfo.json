@@ -1,0 +1,25 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "imightlive@gmail.com",
+    "longName": "Bus",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "Bus",
+    "targetPlatforms": [
+        "aplite",
+        "basalt",
+        "chalk"
+    ],
+    "uuid": "055c05ec-2d9c-4dfb-9e61-9da98fbebdf2",
+    "versionLabel": "0.01",
+    "watchapp": {
+        "hiddenApp": true,
+        "watchface": false
+    }
+}
