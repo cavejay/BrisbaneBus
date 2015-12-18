@@ -9,6 +9,17 @@ var requestStructure = {
   encoding: null
 };
 
+/* Takes an entity and spits out an object with the information we wanted from it
+  output = {
+    route: 0,
+    location: '',
+    time till stops: '',
+  }
+ */
+var processEntityData = function graEntityData (entity) {
+
+};
+
 function Feed () {
   // if user accidentally omits the new keyword, this will silently correct the problem...
   if (!(this instanceof arguments.callee)) {
@@ -32,10 +43,10 @@ util.inherits(Feed, EventEmitter);
  */
 Feed.prototype.setup = function update (feedURL, protoFile) {
   if (!feedURL) throw new Error('Invalid feedURL');
-  if (!protoFile) protoFile = '../resources/gtfs-realtime.proto';
+  if (!protoFile) protoFile = './resources/gtfs-realtime.proto';
   this.protoDesc = Protobuf.loadProtoFile(protoFile);
 
-  if (!this.protoDesc) throw new Error('ProtoBuffer Description Loading Failed');
+  if (!this.protoDesc) throw new Error('ProtoBuffer Description Loading Failed: ' + this.protoDesc);
 
   this.gtfsrt = this.protoDesc.build().transit_realtime;
   if (!this.gtfsrt) throw new Error('ProtoBuff Build Failed');
@@ -50,18 +61,31 @@ Feed.prototype.setup = function update (feedURL, protoFile) {
  * in Feed.lastKnownGood
  */
 Feed.prototype.update = function update () {
+  var self = this;
   request(requestStructure, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-      Feed.lastKnownGood.feed = this.gtfsrt.FeedMessage.decode(body);
-      Feed.lastKnownGood.time = new Date();
+      console.log('Feed: ' + util.inspect(self.gtfsrt));
+      self.lastKnownGood.feed = self.gtfsrt.FeedMessage.decode(body);
+      self.lastKnownGood.time = new Date();
     }
-    this.emit('updated');
+    self.emit('updated');
   });
+  return this;
 };
 
 Feed.prototype.getRoute = function getRoute (routeId) {
+  return this;
 };
 
-Feed.prototype.getRequestStructure = function getRequestStructure () {};
+Feed.prototype.getRouteList = function getRouteList () {
+  var routes = [];
+  this.lastKnownGood.feed.entities.forEach(function (ent) {
+    if (!routes.indexOf(ent)) {
+      routes.add(ent);
+    }
+  });
+};
+
+Feed.prototype.getRequestStructure = function getRequestStructure () { return requestStructure; };
 
 exports = module.exports = new Feed();
