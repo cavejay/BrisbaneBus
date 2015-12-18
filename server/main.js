@@ -2,7 +2,8 @@
 var restify = require('restify');
 var util = require('util');
 var translink = require('./lib/TranslinkGTFS.js');
-var feed = require('./lib/TranslinkFeed.js').setup(translink.gtfsrt);
+var feed = require('./lib/TranslinkFeed.js');
+feed.setup(translink.gtfsrt);
 
 var server = restify.createServer({
   name: 'BrisbaneBus'
@@ -26,5 +27,5 @@ server.listen(8080, function () {
 });
 
 feed.on('updated', function () {
-  
-})
+  console.log('Feed was updated with: \n' + util.inspect(feed.lastKnownGood.feed));
+});

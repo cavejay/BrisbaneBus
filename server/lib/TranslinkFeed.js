@@ -11,23 +11,26 @@ var requestStructure = {
 
 function Feed () {
   // if user accidentally omits the new keyword, this will silently correct the problem...
-  if (!(this instanceof Feed)) return new Feed();
-
+  if (!(this instanceof arguments.callee)) {
+    throw new Error('Constructor called as a function');
+  }
   EventEmitter.call(this);
-}
 
-Feed.gtfsrt = {};
-Feed.protoDesc = {};
-Feed.lastKnownGood = {
-  time: 0,
-  feed: undefined
-};
+  this.gtfsrt = {};
+  this.protoDesc = {};
+  this.lastKnownGood = {
+    time: 0,
+    feed: undefined
+  };
+
+  return this;
+}
 
 util.inherits(Feed, EventEmitter);
 
 /* Loads the protobuffer and does an initial fetching of the realtime feed
  */
-Feed.setup = function (feedURL, protoFile) {
+Feed.prototype.setup = function update (feedURL, protoFile) {
   if (!feedURL) throw new Error('Invalid feedURL');
   if (!protoFile) protoFile = '../resources/gtfs-realtime.proto';
   this.protoDesc = Protobuf.loadProtoFile(protoFile);
@@ -39,24 +42,26 @@ Feed.setup = function (feedURL, protoFile) {
 
   requestStructure.url = feedURL;
 
-  Feed.update();
+  this.update();
   return this;
 };
 
 /* Fetches the realtime feed and stores the current time and the decoded feed
  * in Feed.lastKnownGood
  */
-Feed.update = function () {
+Feed.prototype.update = function update () {
   request(requestStructure, function (error, response, body) {
     if (!error && response.statusCode === 200) {
       Feed.lastKnownGood.feed = this.gtfsrt.FeedMessage.decode(body);
       Feed.lastKnownGood.time = new Date();
     }
-    Feed.emit('updated');
+    this.emit('updated');
   });
 };
 
-Feed.getRoute = function (routeId) {
-}
+Feed.prototype.getRoute = function getRoute (routeId) {
+};
 
-exports = module.export = new Feed();
+Feed.prototype.getRequestStructure = function getRequestStructure () {};
+
+exports = module.exports = new Feed();
