@@ -1,12 +1,13 @@
 // this is main
 var restify = require('restify');
-var util = require('util');
-var translink = require('./lib/TranslinkGTFS.js');
 var feed = require('./lib/TranslinkFeed.js');
+var translink = require('./lib/TranslinkGTFS.js');
+
+// Setup the parser
 feed.setup(translink.gtfsrt);
 
 feed.on('updated', function () {
-  console.log('Feed was updated with: \n' + util.inspect(feed.lastKnownGood.feed));
+  console.log('Feed was updated at ' + feed.lastKnownGood.time);
 });
 
 var server = restify.createServer({
@@ -19,11 +20,11 @@ server.get('/hello/:name', function (req, res, next) {
 
 server.get('/route/:routeid', function (req, res, next) {
   res.send('Getting route: ' + req.params.routeid);
-  feed.update();
 });
 
 server.get('/routelist', function (req, res, next) {
-  res.send('Getting list of Buses');
+  res.send(feed.getRouteList());
+  console.log('served route list');
 });
 
 server.listen(8080, function () {

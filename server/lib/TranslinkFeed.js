@@ -64,7 +64,6 @@ Feed.prototype.update = function update () {
   var self = this;
   request(requestStructure, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-      console.log('Feed: ' + util.inspect(self.gtfsrt));
       self.lastKnownGood.feed = self.gtfsrt.FeedMessage.decode(body);
       self.lastKnownGood.time = new Date();
     }
@@ -79,11 +78,16 @@ Feed.prototype.getRoute = function getRoute (routeId) {
 
 Feed.prototype.getRouteList = function getRouteList () {
   var routes = [];
-  this.lastKnownGood.feed.entities.forEach(function (ent) {
-    if (!routes.indexOf(ent)) {
-      routes.add(ent);
+  if (!this.lastKnownGood || !this.lastKnownGood.feed) throw new Error('Missing Feed Data');
+  this.lastKnownGood.feed.entity.forEach(function (ent) {
+    if (ent.vehicle && ent.vehicle.position) {
+      var r = ent.vehicle.trip.route_id.split('-')[0];
+      if (routes.indexOf(r) === -1) {
+        routes.push(r);
+      }
     }
   });
+  return routes;
 };
 
 Feed.prototype.getRequestStructure = function getRequestStructure () { return requestStructure; };
