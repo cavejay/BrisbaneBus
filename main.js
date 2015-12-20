@@ -5,6 +5,9 @@ var fs = require('fs');
 var translink = require('./lib/TranslinkGTFS.js');
 var marked = require('marked');
 
+// Load index page
+var indexPage = fs.readFileSync('README.md', 'utf8');
+
 // Setup the parser
 feed.setup(translink.gtfsrt);
 
@@ -16,17 +19,19 @@ var server = restify.createServer({
   name: 'BrisbaneBus'
 });
 
-server.get('/', function (req, res, next) {
-  res.send(marked(fs.readFileSync('./resources/doco.md')));
-});
+// Converts the README to HTML and serves it
+var serveIndex = function serveIndex (req, res, next) {
+  var body = marked(indexPage);
+  res.writeHead(200, {
+    'Content-Length': Buffer.byteLength(body),
+    'Content-Type': 'text/html'
+  });
+  res.write(body);
+  res.end();
+};
 
-server.get('/index.html', function (req, res, next) {
-  res.send(marked(fs.readFileSync('./resources/doco.md')));
-})
-
-server.get('/hello/:name', function (req, res, next) {
-  res.send('Hello ' + req.params.name);
-});
+server.get('/', serveIndex);
+server.get('/index.html', serveIndex);
 
 server.get('/route/:routeid', function (req, res, next) {
   res.send('Getting route: ' + req.params.routeid);
@@ -34,7 +39,7 @@ server.get('/route/:routeid', function (req, res, next) {
 
 server.get('/routelist', function (req, res, next) {
   res.send(feed.getRouteList());
-  console.log('served route list');
+  console.log('Served route list');
 });
 
 server.listen(4000, function () {

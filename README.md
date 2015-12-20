@@ -10,4 +10,16 @@ Currently this website, the BrisbaneBus service only supplies realtime informati
 ## Endpoints
 ### /routelist
 
-Returns a json array containing all the routes with buses currently servicing them
+Returns a json array containing all the routes with buses currently servicing them.
+
+### /route/:routeid
+
+*NOT IMPLEMENTED YET*
+
+Returns an array of JSON objects providing information on each Bus on the given route.
+
+### /route/:routeid/near/:longitude/:latitude
+
+*NOT IMPLEMENTED YET*
+
+Returns the stop id of the stop closest to provided longitude and latitude.
