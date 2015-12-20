@@ -1,7 +1,9 @@
 // this is main
 var restify = require('restify');
 var feed = require('./lib/TranslinkFeed.js');
+var fs = require('fs');
 var translink = require('./lib/TranslinkGTFS.js');
+var marked = require('marked');
 
 // Setup the parser
 feed.setup(translink.gtfsrt);
@@ -13,6 +15,14 @@ feed.on('updated', function () {
 var server = restify.createServer({
   name: 'BrisbaneBus'
 });
+
+server.get('/', function (req, res, next) {
+  res.send(marked(fs.readFileSync('./resources/doco.md')));
+});
+
+server.get('/index.html', function (req, res, next) {
+  res.send(marked(fs.readFileSync('./resources/doco.md')));
+})
 
 server.get('/hello/:name', function (req, res, next) {
   res.send('Hello ' + req.params.name);
