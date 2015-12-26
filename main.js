@@ -11,6 +11,11 @@ var indexPage = fs.readFileSync('README.md', 'utf8');
 // Setup the parser
 feed.setup(translink.gtfsrt);
 
+// Ensure we have the gtfs data available
+translink.downloadGTFSData(function () {
+  console.log('finished download I think');
+});
+
 // Start listening to it's events
 feed.on('updated', function () {
   console.log('Feed was updated at ' + feed.lastKnownGood.time);
