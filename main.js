@@ -11,10 +11,12 @@ var indexPage = fs.readFileSync('README.md', 'utf8');
 // Setup the parser
 feed.setup(translink.gtfsrt);
 
+// Start listening to it's events
 feed.on('updated', function () {
   console.log('Feed was updated at ' + feed.lastKnownGood.time);
 });
 
+// Setup the server
 var server = restify.createServer({
   name: 'BrisbaneBus'
 });
@@ -30,6 +32,7 @@ var serveIndex = function serveIndex (req, res, next) {
   res.end();
 };
 
+/* Server endpoints */
 server.get('/', serveIndex);
 server.get('/index.html', serveIndex);
 
@@ -42,6 +45,7 @@ server.get('/routelist', function (req, res, next) {
   console.log('Served route list');
 });
 
+// Start the server
 server.listen(4000, function () {
   console.log('%s listening at %s', server.name, server.url);
 });
