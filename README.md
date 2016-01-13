@@ -1,6 +1,3 @@
-<link rel="stylesheet" type="text/css" href="https://gist.githubusercontent.com/tuzz/3331384/raw/d1771755a3e26b039bff217d510ee558a8a1e47d/github.css">
-<!-- https://raw.githubusercontent.com/jasonm23/markdown-css-themes/gh-pages/swiss.css -->
-
 # BrisbaneBus API Documentation
 
 ---

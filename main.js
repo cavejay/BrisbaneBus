@@ -8,7 +8,7 @@ var marked = require('marked');
 // Load index page
 var indexPage = fs.readFileSync('README.md', 'utf8');
 
-console.log('Setting up parser');
+console.log('Setting up Feed parser');
 feed.setup(translink.gtfsrt);
 
 console.log('Checking GTFS Data');
@@ -36,6 +36,8 @@ var server = restify.createServer({
 // Converts the README to HTML and serves it
 var serveIndex = function serveIndex (req, res, next) {
   var body = marked(indexPage);
+  body = '<head><link rel=\"stylesheet\" type=\"text/css\" href=\"http://jasonm23.github.io/markdown-css-themes/swiss.css\"></head>' +
+    '<body>' + body + '</body>';
   res.writeHead(200, {
     'Content-Length': Buffer.byteLength(body),
     'Content-Type': 'text/html'
