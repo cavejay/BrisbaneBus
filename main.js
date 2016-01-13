@@ -11,18 +11,6 @@ var indexPage = fs.readFileSync('README.md', 'utf8');
 console.log('Setting up Feed parser');
 feed.setup(translink.gtfsrt);
 
-console.log('Checking GTFS Data');
-translink.checkForGTFSData(function (err) {
-  if (err) {
-    console.log('GTFS Data doesn\'t exist, downloading it now');
-    translink.downloadGTFSData(function () {
-      console.log('Finished downloading GTFS data');
-    });
-  } else {
-    console.log('GTFS Data loaded successfully');
-  }
-});
-
 // Start listening to it's events
 feed.on('updated', function () {
   console.log('Feed was updated at ' + feed.lastKnownGood.time);
