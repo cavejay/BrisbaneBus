@@ -25,3 +25,13 @@ Returns an array of JSON objects providing information on each Bus on the given 
 *NOT IMPLEMENTED YET*
 
 Returns the stop id of the stop closest to provided longitude and latitude.
+
+## Installation
+
+This service requires that you have access to a MongoDB instance.  
+ 1. Clone this repo. `git clone https://github.com/cavejay/BrisbaneBus.git`
+ 2. `cd BrisbaneBus && npm install .`
+ 3. Open resources/config.js with a text editor and correct line 7 to point to your preferred mongo instance. The default setting is to use a local instance.
+ 4. `node /bin/gtfsSetup.js` handles the downloading and loading into MongoDB of the Translink GTFS data. This will take *very* long time, about 20 minutes.
+ 5. `node main.js` or `npm start` can be used to start the server.
+ 6. If the server is to be run in a headless environment it's recommended to install pm2, a node process manager. This command will install and start pm2 for this server `npm install -g pm2 && pm2 start main.js`.
