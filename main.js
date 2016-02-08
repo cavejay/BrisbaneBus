@@ -35,11 +35,17 @@ server.get('/index.html', web.serveIndex);
 
 server.get('/route/:routeid', function (req, res, next) {
   res.send('Getting route: ' + req.params.routeid);
+  console.log('[API] specific route');
+});
+
+server.get('/liveroutelist', function (req, res, next) {
+  res.send(feed.getRouteList());
+  console.log('[API] Live Route List');
 });
 
 server.get('/routelist', function (req, res, next) {
-  res.send(feed.getRouteList());
-  console.log('Served route list');
+  res.send('Not implemented yet :(');
+  console.log('[API] All Routes in network');
 });
 
 // Start the server
