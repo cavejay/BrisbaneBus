@@ -16,6 +16,19 @@ var server = restify.createServer({
   name: 'BrisbaneBus'
 });
 
+server.use(function catchAll (req, res, next) {
+  // If we're req'ing for the homepage let it pass through.
+  if (req.url === '/') {
+    next();
+  } else if (feed.isOutOfDate()) {
+    feed.update(function ifOutOfDate (f) {
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
 /* Server endpoints */
 server.get('/', web.serveIndex);
 server.get('/index.html', web.serveIndex);
