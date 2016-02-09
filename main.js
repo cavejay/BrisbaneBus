@@ -38,7 +38,7 @@ server.get('/route/:routeid', function (req, res, next) {
   console.log('[API] specific route');
 });
 
-server.get('/liveroutelist', function (req, res, next) {
+server.get('/routelist/live', function (req, res, next) {
   res.send(feed.getRouteList());
   console.log('[API] Live Route List');
 });

@@ -12,6 +12,10 @@ Continued development of this project is being done at [cavejay/BrisbaneBus](htt
 ## Endpoints
 ### /routelist
 
+Returns a JSON array of all the routes in the network
+
+### /routelist/live
+
 Returns a JSON array containing all the routes with buses currently servicing them.
 
 ### /route/:routeid
