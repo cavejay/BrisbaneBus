@@ -1,4 +1,8 @@
 # BrisbaneBus API Documentation
+---
+## Notice
+
+I no longer live in Brisbane or heavily use public transport so this project is fairly dead in the water. Feel free to use this code if you see it being useful.
 
 ---
 ## Background & Explanation
